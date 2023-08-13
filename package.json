@@ -1,5 +1,5 @@
 {
-  "name": "Secrets",
+  "name": "Authenticate",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -10,7 +10,9 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "mongoose": "^5.4.5",
+    "mongoose-encryption": "^2.1.2",
     "mongoose-findorcreate": "^3.0.0",
+    "mongoose-unique-validator": "^4.0.0",
     "passport": "^0.6.0",
     "passport-google-oauth20": "^1.0.0",
     "passport-local": "^1.0.0",

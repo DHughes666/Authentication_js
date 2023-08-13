@@ -9,6 +9,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 
 const mongoose = require("mongoose");
+const uniqueValidator = require('mongoose-unique-validator');
+const encrypt = require('mongoose-encryption');
 mongoose.connect('mongodb://localhost:27017/AuthenticateDB', {
   useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => {
@@ -18,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/AuthenticateDB', {
   console.log(err);
 })
 
-const userSchema = {
+const userSchema = new mongoose.Schema ({
   email: {
     type: String,
     required: [true, 'Please provide an email']
@@ -27,9 +29,21 @@ const userSchema = {
     type: String,
     required: [true, 'Please provide a password']
   }
-}
+});
 
+//Apply the unique validator to the schema
+// userSchema.plugin(uniqueValidator);
+
+
+// Create a secret
+const secret = "Thisisourlittlesecret.";
+userSchema.plugin(encrypt, {secret: secret, encryptedFields: ['password']})
+
+
+//Now we can create the schema
 const User = new mongoose.model('User', userSchema);
+
+
 
 app.get("/", function(req, res){
   res.render("home");
