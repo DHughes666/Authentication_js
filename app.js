@@ -63,6 +63,8 @@ passport.deserializeUser(User.deserializeUser());
 // await user.save();
 // const { user } = await DefaultUser.authenticate()('user', password);
 
+const context = 'Harry Loraine!! I hope that makes sense to you?'
+
 app.get("/", function(req, res){
   res.render("home");
 });
@@ -77,7 +79,7 @@ app.get("/register", function(req, res){
 
 app.get("/secrets", function(req, res){
   if (req.isAuthenticated()) {
-    res.render("secrets", {userwithSecrets: 'Hi'})
+    res.render("secrets", {userwithSecrets: context})
   } else {
     res.redirect("/login");
   }
