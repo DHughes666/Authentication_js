@@ -36,20 +36,18 @@ mongoose.connect('mongodb://localhost:27017/AuthenticateDB', {
 mongoose.set('useCreateIndex', true);
 
 const userSchema = new mongoose.Schema ({
-  email: {
+  username: {
     type: String,
-    required: [true, 'Please provide an email']
   },
   password: {
     type: String,
-    required: [true, 'Please provide a password']
   },
   active: Boolean
 
 });
 
 //Passport will hash, sort and organize passwords into our database
-userSchema.plugin(passportLocalMongoose, {usernameField: 'email'});
+userSchema.plugin(passportLocalMongoose);
 
 //Now we can create the schema
 const User = new mongoose.model('User', userSchema);
@@ -79,14 +77,16 @@ app.get("/register", function(req, res){
 
 app.get("/secrets", function(req, res){
   if (req.isAuthenticated()) {
-    res.render("secrets")
+    res.render("secrets", {userwithSecrets: 'Hi'})
   } else {
     res.redirect("/login");
   }
-})
+});
 
 app.post("/register", function(req, res){
-  User.register({username: req.body.username}, req.body.password, function(err, user){
+  User.register(
+    {username: req.body.username}, req.body.password,
+    function(err, user){
     if (err) {
       console.log(err);
       res.redirect("/register");
