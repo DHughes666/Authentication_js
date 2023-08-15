@@ -14,3 +14,7 @@ body {
   color: #fff;
   background-color: #000;
 }
+
+.login-redirect {
+  padding-top: 20px;
+}
