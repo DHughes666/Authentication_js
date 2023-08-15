@@ -38,14 +38,9 @@ mongoose.connect('mongodb://localhost:27017/AuthenticateDB', {
 mongoose.set('useCreateIndex', true);
 
 const userSchema = new mongoose.Schema ({
-  username: {
-    type: String,
-  },
-  password: {
-    type: String,
-  },
-  active: Boolean
-
+  username: String,
+  password: String,
+  googleId: String
 });
 
 //Passport will hash, sort and organize passwords into our database
@@ -120,6 +115,14 @@ app.get("/secrets", function(req, res){
     res.redirect("/login");
   }
 });
+
+app.get("/submit", function(req, res){
+  if (req.isAuthenticated()) {
+    res.render("submit");
+  } else {
+    res.redirect("/login")
+  }
+})
 
 app.get("/logout", function(req, res){
   req.logout(function(err, resp){
