@@ -58,8 +58,17 @@ const User = new mongoose.model('User', userSchema);
 //The following codes will be added after the declaration of the model
 passport.use(User.createStrategy());
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// Expanded passport.serializeUser
+passport.serializeUser(function(user, done){
+  done(null, user.id);
+});
+
+//Expanded passport.deserializeUser
+passport.deserializeUser(function(id, done){
+  User.findById(id, function(err, user){
+    done(err, user);
+  });
+});
 
 passport.use(new GoogleStrategy({
     clientID: process.env.CLIENT_ID,
@@ -68,6 +77,7 @@ passport.use(new GoogleStrategy({
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
+    console.log(profile);
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
     });
@@ -85,12 +95,15 @@ app.get("/", function(req, res){
   res.render("home");
 });
 
-// app.get("/auth/google", function(req, res){
-//   passport.authenticate("google", {scope: ["profile"]})
-// })
+app.get("/auth/google",
+  passport.authenticate("google", { scope: ["profile"] }));
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope: ['profile'] }));
+  app.get("/auth/google/secrets",
+    passport.authenticate("google", { failureRedirect: "/login "}),
+    function(req, res) {
+      // Successful authentication, redirect to the secrets page.
+      res.redirect("/secrets");
+    });
 
 app.get("/login", function(req, res){
   res.render("login");
