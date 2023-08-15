@@ -2,10 +2,10 @@
   "name": "Authenticate",
   "version": "1.0.0",
   "description": "",
+  "main": "app.js",
   "engines": {
     "node": "18.12.1"
-  },
-  "main": "app.js",
+  }, 
   "dependencies": {
     "bcrypt": "^5.1.0",
     "body-parser": "^1.18.3",
