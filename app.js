@@ -26,7 +26,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect('mongodb+srv://lambeezra:Scypher064@cluster0.elnki8k.mongodb.net/AuthenticateDB?retryWrites=true&w=majority', {
+const atlasUsername = process.env.MONGODB_ATLAS_USERNAME;
+const atlasPassword = process.env.MONGODB_ATLAS_PASSWORD;
+const atlasClusterUrl = process.env.MONGODB_ATLAS_CLUSTER_URL;
+
+// Connect to MongoDB Atlas
+
+mongoose.connect(`mongodb+srv://${atlasUsername}:${atlasPassword}@${atlasClusterUrl}`, {
   useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => {
   console.log("CONNECTION OPEN!!!");
